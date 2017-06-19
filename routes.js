@@ -14,6 +14,8 @@ router.get('/', (req, res) => {
   // res.send(`Hey! I'm a route!`);
 });
 
+router.get('/api/fetch-accounts', catchErrors(actions.fetchAccounts));
+
 router.post('/api/add-card', catchErrors(actions.addCard));
 router.post('/api/delete-card', catchErrors(actions.deleteCard));
 

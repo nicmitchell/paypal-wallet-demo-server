@@ -1,23 +1,36 @@
 const mongoose = require('mongoose');
 const Account = mongoose.model('Account');
 
-exports.addCard = async (req, res, next) => {
-  console.log('req.body', req.body);
-  const newAccount = new Account(req.body);
-  await newAccount.save((err, snapshot) => {
-    if (err) {
-      throw Error(err);
-    } else {
-      res.send(snapshot);
-    }
-  });
-  next();
-}
+// GET actions
+exports.fetchAccounts = (req, res, next) => {
+  return Account.find()
+    .then((accounts) => { 
+      res.send(accounts) 
+    })
+    .catch((err) => { 
+      throw Error(err) 
+    });
+};
 
-exports.deleteCard = async (req, res, next) => {
-  const id = req.body.id;
-  Account.findByIdAndRemove(id, (err, snapshot) => {
-    res.send(snapshot);
-  })
-  next();
-}
+// POST actions
+exports.addCard = (req, res, next) => {
+  const newAccount = new Account(req.body);
+  return newAccount.save()
+    .then((snapshot) => {
+      res.send(snapshot)
+    })
+    .catch((err) => { 
+      throw Error(err) 
+    });
+};
+
+exports.deleteCard = (req, res, next) => {
+  const id = req.body._id;
+  return Account.findByIdAndRemove(id)
+    .then((snapshot) => {
+      res.send({ id })
+    })
+    .catch((err) => { 
+      throw Error(err) 
+    });
+};
